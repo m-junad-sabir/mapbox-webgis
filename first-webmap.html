@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>First Web Map - Display a map on a webpage</title>
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #mapdiv {
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapdiv">
+
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoianVuYWlkLXNhYmlyIiwiYSI6ImNtZ2V5YXA2NjAyZ2IyaXNjcW0wZ28wYncifQ.fMLib26FJeaxZ2FT2A7jhA';
+        const map = new mapboxgl.Map({
+        container: 'mapdiv', // container ID
+        center: [73.38, 33.69], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+        zoom: 11, // starting zoom
+        style: 'mapbox://styles/junaid-sabir/cmgew1i04000101sdggluerd0'
+        });
+    </script>
+  </body>
+</html>
