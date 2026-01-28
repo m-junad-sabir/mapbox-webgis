@@ -1,0 +1,37 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.28.13-Firenze">
+  <identifier>pak_ad2_pfrc_ply</identifier>
+  <parentidentifier></parentidentifier>
+  <language>EN</language>
+  <type>dataset</type>
+  <title>pak_ad2_pfrc_ply</title>
+  <abstract>District polygons
+
+REQUIRED: A summary of the intentions with which the data set was developed.</abstract>
+  <keywords vocabulary="gmd:topicCategory">
+    <keyword>District Boundary</keyword>
+  </keywords>
+  <links>
+    <link size="" name="Shapefile" type="Local Area Network" description="" url="file://" format="" mimeType=""/>
+  </links>
+  <fees></fees>
+  <constraints type="Access">REQUIRED: Restrictions and legal prerequisites for accessing the data set.</constraints>
+  <rights>REQUIRED: Restrictions and legal prerequisites for using the data set after access is granted.</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt></wkt>
+      <proj4></proj4>
+      <srsid>0</srsid>
+      <srid>0</srid>
+      <authid></authid>
+      <description></description>
+      <projectionacronym></projectionacronym>
+      <ellipsoidacronym></ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial dimensions="2" miny="23.69468000000000174" maxz="0" maxy="37.08941999999999695" minx="60.87859999999999872" maxx="79.30734999999999957" crs="EPSG:4326" minz="0"/>
+  </extent>
+</qgis>
