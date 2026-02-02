@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add a GeoJSON polygon</title>
+    <meta property="og:description" content="LEARNING MAPBOX GL JS" />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.15.0/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@5.15.0/dist/maplibre-gl.js'></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: -webkit-fill-available;
+            margin: 13px;
+            height: 92vh;
+        }
+
+        #navbar {
+            position: absolute;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+            font-family: Arial, sans-serif;
+            margin: 0px 0px 0px 0px;
+            left: 13px;
+            right: 0px;
+        }
+    </style>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/@watergis/maplibre-gl-terradraw@1.0.1/dist/maplibre-gl-terradraw.umd.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@watergis/maplibre-gl-terradraw@1.0.1/dist/maplibre-gl-terradraw.css"
+/>
+
+<style>
+    #marker {
+        width: 40px;
+        height: 40px;
+        background-image: url('https://maplibre.org/maplibre-gl-js/docs/assets/washington-monument.jpg');
+        background-size: cover;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .maplibregl-popup {
+        max-width: 200px;
+    }
+
+    .coordinates {
+        font-family: Arial, sans-serif;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        position: absolute;
+        bottom: 40px;
+        left: 10px;
+        padding: 5px 10px;
+        margin: 0;
+        font-size: 11px;
+        line-height: 18px;
+        border-radius: 3px;
+        display: none;
+    }
+
+    #fit {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 37%;
+        transform: translate(-50%);
+        width: 23%;
+        height: 40px;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #fff;
+        background: #ee8a65;
+    }
+
+    #fly {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 61%;
+        transform: translate(-50%);
+        width: 23%;
+        height: 40px;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #fff;
+        background: #6595ee;
+    }
+
+    #file {
+        position: absolute;
+        top: 50px;
+        left: 15px;
+    }
+
+    .maplibregl-ctrl-top-left {
+        top: 100px;
+    }
+    .maplibregl-ctrl-top-right {
+        top: 80px;
+    }
+
+    
+</style>
+
+<div id="navbar">
+    <a href="index.html">Home</a> |
+    <a href="firstmap.html">First Map</a> |
+    <a href="geojson-polygon.html">GeoJSON Polygon</a> |
+    <a href="marker-popup.html">Marker & Popup</a>
+</div>
+<div id="map"></div>
+<pre id="coordinates" class="coordinates"></pre>
+
+<button id="fit">Zoom To Home</button>
+
+<button id="fly">Fly to Pakistan</button>
+
+<label for="file"></label>
+<input
+    type="file"
+    id="file"
+    name="file"
+    accept="application/geo+json,application/vnd.geo+json,.geojson"
+    title="Upload a GeoJSON file"
+    placeholder="Choose a GeoJSON file"
+/>
+
+<script>
+    const monument = [-77.0353, 38.8895];
+    const map = new maplibregl.Map({
+        container: 'map',
+        style: {
+            version: 8,
+            sources: {
+                'osm': {
+                    type: 'raster',
+                    tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                    tileSize: 256,
+                    attribution: '© OpenStreetMap contributors'
+                }
+            },
+            layers: [
+                {
+                    id: 'osm',
+                    type: 'raster',
+                    source: 'osm'
+                }
+            ]
+        },
+        //center: [-68.13734351262877, 45.137451890638886],
+        center: monument,
+        zoom: 5
+    });
+
+    map.on('load', async () => {
+
+        // Add an image to use as a custom marker
+        const image = await map.loadImage('https://maplibre.org/maplibre-gl-js/docs/assets/custom_marker.png');
+        map.addImage('custom-marker', image.data);
+
+        map.addSource('maine', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [
+                        [
+                            [-67.13734351262877, 45.137451890638886],
+                            [-66.96466, 44.8097],
+                            [-68.03252, 44.3252],
+                            [-69.06, 43.98],
+                            [-70.11617, 43.68405],
+                            [-70.64573401557249, 43.090083319667144],
+                            [-70.75102474636725, 43.08003225358635],
+                            [-70.79761105007827, 43.21973948828747],
+                            [-70.98176001655037, 43.36789581966826],
+                            [-70.94416541205806, 43.46633942318431],
+                            [-71.08482, 45.3052400000002],
+                            [-70.6600225491012, 45.46022288673396],
+                            [-70.30495378282376, 45.914794623389355],
+                            [-70.00014034695016, 46.69317088478567],
+                            [-69.23708614772835, 47.44777598732787],
+                            [-68.90478084987546, 47.184794623394396],
+                            [-68.23430497910454, 47.35462921812177],
+                            [-67.79035274928509, 47.066248887716995],
+                            [-67.79141211614706, 45.702585354182816],
+                            [-67.13734351262877, 45.137451890638886]
+                        ]
+                    ]
+                }
+            }
+        });
+        map.addLayer({
+            'id': 'maine',
+            'type': 'fill',
+            'source': 'maine',
+            'layout': {},
+            'paint': {
+                'fill-color': '#088',
+                'fill-opacity': 0.8
+            }
+        });
+        // When a click event occurs on a feature in the maine layer, open a popup at the
+        // location of the click, with description HTML from its properties.
+        map.on('click', 'maine', (e) => {
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.name)
+                .addTo(map);
+        });
+        // Change the cursor to a pointer when the mouse is over the maine layer.
+        map.on('mouseenter', 'maine', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'maine', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+        map.addSource('points', {
+           'type': 'geojson',
+           'data': {
+               'type': 'FeatureCollection',
+               'features': [
+                   {
+                       'type': 'Feature',
+                       'geometry': {
+                           'type': 'Point',
+                           'coordinates': [
+                           -77.93532, 24.32265
+                           ]
+                       },
+                       'properties': {
+                           'title': 'Bahamas Islands',
+                           'description': 'first point'
+                       }
+                   },
+                   {
+                       'type': 'Feature',
+                       'geometry': {
+                           'type': 'Point',
+                           'coordinates': [
+                           -79.12185, 21.85699
+                           ]
+                       },
+                       'properties': {
+                           'title': 'Cuba Islands',
+                           'description': 'second point'
+                       }
+                   },
+                   {
+                       'type': 'Feature',
+                       'geometry': {
+                           'type': 'Point',
+                           'coordinates': [
+                           -77.37559, 18.09394
+                           ]
+                       },
+                       'properties': {
+                           'title': 'Jamaica Islands',
+                           'description': 'third point'
+                       }
+                   }
+               ]
+           }
+        });
+        map.addLayer({
+            'id': 'symbols',
+            'type': 'circle',
+            'source': 'points',
+            'paint': {
+                'circle-radius': 10,
+                'circle-color': 'red'
+            }
+        });
+
+        
+        map.addSource('urban-areas' , {
+            'type': 'geojson',
+            'data': 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_urban_areas.geojson'
+        });
+        map.addLayer({
+            'id': 'urban-areas-fill',
+            'type': 'fill',
+            'source': 'urban-areas',
+            'layout': {},
+            'paint': {
+                'fill-color': '#f08',
+                'fill-opacity': 0.4
+            }
+        },
+        
+        );
+
+
+    });
+
+    // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+        map.on('click', 'symbols', (e) => {
+            map.flyTo({
+                center: e.features[0].geometry.coordinates
+            });
+        });
+
+        // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+        map.on('mouseenter', 'symbols', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'symbols', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+    const popup = new maplibregl.Popup({
+        offset : 25,
+        closeButton: true,
+        closeOnClick: true
+    })
+    .setText('Construction on the Washington Monument began in 1848.');
+
+    const el = document.createElement('div');
+    el.id = 'marker';
+
+    const marker = new maplibregl.Marker({element: el })
+        .setLngLat(monument)
+        .setPopup(popup)
+        .addTo(map);
+
+    map.addControl(new maplibregl.NavigationControl());
+
+    const marker2 = new maplibregl.Marker({
+        draggable: true
+    })
+        .setLngLat([-81.2554, 40.6504])
+        .addTo(map);
+
+    function onDragEnd() {
+        const lngLat = marker2.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+    }
+
+    marker2.on('dragend', onDragEnd);
+
+    document.getElementById('fit').addEventListener('click', () => {
+        map.fitBounds([
+            [-99.323130, 13.810481], // Southwest coordinates
+            [-56.255269, 47.234364]  // Northeast coordinates
+        ]
+        );
+    });
+
+    document.getElementById('fly').addEventListener('click', () => {
+        // Fly to a random location by offsetting the point -74.50, 40
+        // by up to 5 degrees.
+        map.flyTo({
+            center: [
+            70.61036, 30.63806], //  -69.4979 45.1410
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+    });
+
+    function handleFileSelect(evt) {
+        const file = evt.target.files[0]; // Read first selected file
+
+        const reader = new FileReader();
+
+        reader.onload = function (theFile) {
+            // Parse as (geo)JSON
+            const geoJSONcontent = JSON.parse(theFile.target.result);
+
+            // Add as source to the map
+            map.addSource('uploaded-source', {
+                'type': 'geojson',
+                'data': geoJSONcontent
+            });
+
+            map.addLayer({
+                'id': 'uploaded-polygons',
+                'type': 'fill',
+                'source': 'uploaded-source',
+                'paint': {
+                    'fill-color': '#6595ee',
+                    'fill-outline-color': 'red',
+                    'fill-opacity': 1
+                },
+                // filter for (multi)polygons; for also displaying linestrings
+                // or points add more layers with different filters
+                'filter': ['==', '$type', 'Polygon']
+            });
+        };
+
+        // Read the GeoJSON as text
+        reader.readAsText(file, 'UTF-8');
+    }
+    map.on('click', 'uploaded-polygons', (e) => {
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.name)
+                .addTo(map);
+    });
+    // Change the cursor to a pointer when the mouse is over the maine layer.
+    map.on('mouseenter', 'uploaded-polygons', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'uploaded-polygons', () => {
+        map.getCanvas().style.cursor = '';
+    });
+
+    document
+        .getElementById('file')
+        .addEventListener('change', handleFileSelect, false);
+
+    // By default, all terra-draw drawing modes are enabled.
+    // you can disable some of modes in the constructor options if you want.
+    const draw = new MaplibreTerradrawControl.MaplibreTerradrawControl({
+        modes: [
+            // 'render', comment this to always show drawing tool
+            'point',
+            'linestring',
+            'polygon',
+            'rectangle',
+            'circle',
+            'freehand',
+            'angled-rectangle',
+            'sensor',
+            'sector',
+            'select',
+            'delete-selection',
+            'delete',
+            'download'
+        ],
+        open: true,
+    });
+    map.addControl(draw, 'top-left');
+</script>
+</body>
+</html>
