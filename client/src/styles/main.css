@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import 'maplibre-gl/dist/maplibre-gl.css';
+@import '@watergis/maplibre-gl-terradraw/dist/maplibre-gl-terradraw.css';
+
+@theme {
+  --color-gis-primary: #2563eb;
+  --color-gis-sidebar: #0f172a;
+  --color-gis-toolbar: #ffffff;
+  --color-gis-status: #1e293b;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+.maplibregl-map {
+  font-family: inherit;
+}
+
+.maplibregl-popup-content {
+  @apply rounded-lg shadow-lg text-sm;
+}
+
+.panel-slide-enter-active,
+.panel-slide-leave-active {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.panel-slide-enter-from,
+.panel-slide-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
