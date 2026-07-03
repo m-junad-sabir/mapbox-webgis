@@ -10,7 +10,28 @@ import { errorHandler, notFound } from './middleware/errorHandler.js'
 
 const app = express()
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }))
+// Allow requests from your specific Vercel production domain
+const allowedOrigins = [
+  'https://gis-editing-crud-o2mm30csj-muhammad-junaid-sabirs-projects.vercel.app', // Your production frontend
+  'http://localhost:5173',                        // Local development (Vite)
+  'https://supabase.com/dashboard/project/zuynkvjtwpfvfxsymhwj', // Supabase database
+];
+
+//app.use(cors({ origin: allowedOrigins }))
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 app.use(express.json({ limit: '10mb' }))
 
 app.get('/api/health', (_req, res) => {
