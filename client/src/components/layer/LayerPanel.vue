@@ -60,7 +60,7 @@
           <button
             type="button"
             class="rounded px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
-            @click="zoomToLayer(layer.id)"
+            @click="handleZoomToLayer(layer.id)"
           >
             Zoom to
           </button>
@@ -82,17 +82,19 @@ import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useLayerStore } from '@/stores/layerStore'
 import { useMapStore } from '@/stores/mapStore'
+import { useLayerRendering } from '@/composables/useLayerRendering'
 
 const layerStore = useLayerStore()
 const mapStore = useMapStore()
 const { layers, activeLayerId, loading, error } = storeToRefs(layerStore)
+const { zoomToLayer } = useLayerRendering()
 
 onMounted(() => {
   layerStore.fetchLayers()
 })
 
-function zoomToLayer() {
-  mapStore.flyTo({ center: mapStore.center, zoom: 8 })
+async function handleZoomToLayer(id) {
+  zoomToLayer(id)
 }
 
 async function removeLayer(id) {
